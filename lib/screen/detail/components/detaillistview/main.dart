@@ -37,7 +37,7 @@ class _DetailListViewState extends State<DetailListView> {
       return Container(
         width: screenwidth,
         height: screenwidth / 3,
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: CustomColor.baseGrayLoading,

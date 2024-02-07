@@ -40,7 +40,7 @@ class _DetailSuratState extends State<DetailSurat> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('${store.data?.namaLatin} - ${store.data?.artinama}',
+                    Text('${store.data?.namaLatin} - ${store.data?.nama}',
                         style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
