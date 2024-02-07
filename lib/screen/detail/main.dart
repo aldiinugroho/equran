@@ -31,6 +31,7 @@ class ComponentBody extends StatefulWidget {
 }
 
 class _ComponentBodyState extends State<ComponentBody> {
+  late StoreDetailList _storeDetailList = context.read<StoreDetailList>();
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +39,13 @@ class _ComponentBodyState extends State<ComponentBody> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       UseCaseSurat.getSuratDetail(context: context, suratId: widget.detailId);
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _storeDetailList.resetData();
   }
 
   @override

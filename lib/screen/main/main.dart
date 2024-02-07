@@ -1,7 +1,9 @@
 import 'package:equran/constants/customcolor.dart';
 import 'package:equran/screen/main/components/mainheader/main.dart';
 import 'package:equran/screen/main/components/mainlistview/main.dart';
+import 'package:equran/screen/main/store/storemainlist.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -23,6 +25,15 @@ class ComponentMain extends StatefulWidget {
 }
 
 class _ComponentMainState extends State<ComponentMain> {
+  late StoreMainList _storeMainList = context.read<StoreMainList>();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _storeMainList.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
