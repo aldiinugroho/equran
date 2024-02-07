@@ -13,17 +13,20 @@ class Services {
         final result = HandlerApi(data: data, message: "SUCCESS", status: "OK");
         return result;
       } else if (statusCode >= 300 && statusCode <= 399) {
-        throw Exception("FAILED STATUS 3XX");
+        throw 'FAILED STATUS 3XX';
       } else if (statusCode >= 400 && statusCode <= 499) {
-        throw Exception("FAILED STATUS 4XX");
+        throw 'FAILED STATUS 4XX';
       } else if (statusCode >= 500 && statusCode <= 599) {
-        throw Exception("FAILED STATUS 5XX");
+        throw 'FAILED STATUS 5XX';
       } else {
-        throw Exception("Error unknown status code!");
+        throw 'Error unknown status code!';
       }
     } catch (e) {
-      final result = HandlerApi(message: e.toString(), status: "FAILED");
-      throw result;
+      if (e.runtimeType == String) {
+        throw e;
+      } else {
+        throw e.toString();
+      }
     }
   }
 
