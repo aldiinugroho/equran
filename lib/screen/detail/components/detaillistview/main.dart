@@ -3,6 +3,7 @@ import 'package:equran/constants/customcolor.dart';
 import 'package:equran/constants/customfontsize.dart';
 import 'package:equran/screen/detail/components/detaillistview/store/storedetaillist.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class DetailListView extends StatefulWidget {
@@ -97,6 +98,13 @@ class _DetailListViewState extends State<DetailListView> {
                                 width: 1,
                                 style: BorderStyle.solid)),
                         child: InkWell(
+                          onTap: () {
+                            context.push('/tafsir', extra: {
+                              'tafsirId': widget.suratId.toString(),
+                              'ayatId':
+                                  store.data!.ayat[index].nomorAyat.toString()
+                            });
+                          },
                           child: Row(
                             children: [
                               Image.asset(ImagesLocal.quote,
