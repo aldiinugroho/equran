@@ -31,7 +31,7 @@ class _ComponentMainState extends State<ComponentMain> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _storeMainList.dispose();
+    _storeMainList.resetData();
   }
 
   @override
