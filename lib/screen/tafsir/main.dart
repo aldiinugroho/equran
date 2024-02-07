@@ -1,8 +1,10 @@
 import 'package:equran/components/customheader/main.dart';
 import 'package:equran/constants/customcolor.dart';
 import 'package:equran/screen/tafsir/components/tafsirdetail.dart';
+import 'package:equran/screen/tafsir/store/storetafsirdetail.dart';
 import 'package:equran/usecases/tafsir/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TafsirScreen extends StatelessWidget {
   final String tafsirId;
@@ -32,6 +34,7 @@ class ComponentBody extends StatefulWidget {
 }
 
 class _ComponentBodyState extends State<ComponentBody> {
+  late StoreTafsirDetail _storeTafsirDetail = context.read<StoreTafsirDetail>();
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +43,13 @@ class _ComponentBodyState extends State<ComponentBody> {
       Usecasetafsir.getTafsirDetail(
           context: context, ayatId: widget.ayatId, tafsirId: widget.tafsirId);
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _storeTafsirDetail.resetData();
   }
 
   @override
