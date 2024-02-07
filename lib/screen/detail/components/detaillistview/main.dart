@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:equran/constants/assets.dart';
 import 'package:equran/constants/customcolor.dart';
 import 'package:equran/constants/customfontsize.dart';
@@ -15,6 +16,10 @@ class DetailListView extends StatefulWidget {
 }
 
 class _DetailListViewState extends State<DetailListView> {
+  bool isPlaying = false;
+  int? isPlayingIndex;
+  final player = AudioPlayer();
+
   TextStyle style1 = const TextStyle(
       color: Colors.white,
       fontSize: CustomFontSize.large,
@@ -29,6 +34,63 @@ class _DetailListViewState extends State<DetailListView> {
       fontWeight: FontWeight.w500);
   TextStyle style3 =
       const TextStyle(color: Colors.white, fontSize: CustomFontSize.medium3);
+
+  void playAudio({required String url, required int index}) async {
+    try {
+      setState(() {
+        isPlaying = true;
+        isPlayingIndex = index;
+      });
+      await player.play(UrlSource(url));
+    } catch (e) {
+      setState(() {
+        isPlaying = false;
+        isPlayingIndex = null;
+      });
+      await player.dispose();
+    }
+  }
+
+  void stopAudio() async {
+    try {
+      setState(() {
+        isPlaying = false;
+        isPlayingIndex = null;
+      });
+      await player.stop();
+    } catch (e) {
+      setState(() {
+        isPlaying = false;
+        isPlayingIndex = null;
+      });
+      await player.dispose();
+    }
+  }
+
+  void disposeAudio() async {
+    try {
+      await player.dispose();
+    } catch (e) {}
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    player.onPlayerComplete.listen((event) {
+      setState(() {
+        isPlaying = false;
+        isPlayingIndex = null;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    disposeAudio();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +146,29 @@ class _DetailListViewState extends State<DetailListView> {
                   Row(
                     children: [
                       InkWell(
-                        child: Image.asset(ImagesLocal.play,
-                            width: 15, height: 15),
+                        onTap: () {
+                          if (!isPlaying) {
+                            playAudio(
+                                url: store.data!.ayat[index].audio.satu,
+                                index: index);
+                          } else {
+                            stopAudio();
+                          }
+                        },
+                        child: isPlayingIndex == null && isPlaying == false
+                            ? Container(
+                                margin: EdgeInsets.only(right: 15),
+                                child: Image.asset(ImagesLocal.play,
+                                    width: 15, height: 15),
+                              )
+                            : isPlayingIndex == index && isPlaying
+                                ? Container(
+                                    margin: EdgeInsets.only(right: 15),
+                                    child: Image.asset(ImagesLocal.stop,
+                                        width: 15, height: 15),
+                                  )
+                                : Container(),
                       ),
-                      Container(width: 15),
                       Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
