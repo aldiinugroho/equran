@@ -1,6 +1,9 @@
 import 'package:equran/request/surat/main.dart';
+import 'package:equran/screen/detail/components/detaillistview/models/modeldetaillv.dart';
+import 'package:equran/screen/detail/components/detaillistview/store/storedetaillist.dart';
 import 'package:equran/screen/main/components/mainlistview/models/modelmainlv.dart';
 import 'package:equran/screen/main/store/storemainlist.dart';
+import 'package:equran/utils/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,8 +31,37 @@ class UseCaseSurat {
 
   static Future<void> getSuratDetail(
       {required BuildContext context, required String suratId}) async {
+    StoreDetailList store = context.read<StoreDetailList>();
     try {
+      store.setLoading();
       var result = await RequestSurat.get(path: '/$suratId');
-    } catch (e) {}
+      if (result.status != "OK") throw result;
+      final dynamic raw = result.data['data'];
+      final List<dynamic> rawayat = result.data['data']['ayat'];
+      final List<ModelDetailAyat> mappedayat = rawayat
+          .map((e) => ModelDetailAyat(
+              nomorAyat: e['nomorAyat'],
+              teksArab: e['teksArab'],
+              teksLatin: e['teksLatin'],
+              teksIndonesia: e['teksIndonesia'],
+              audio: ModelDetailAyatAudio(
+                  satu: e['audio']['01'],
+                  dua: e['audio']['02'],
+                  tiga: e['audio']['03'],
+                  empat: e['audio']['04'],
+                  lima: e['audio']['05'])))
+          .toList();
+      final ModelDetailLv mapped = ModelDetailLv(
+          namaLatin: raw['namaLatin'],
+          nama: raw['nama'],
+          artinama: raw['arti'],
+          jumlahAyat: raw['jumlahAyat'],
+          tempatturun: raw['tempatTurun'],
+          deskripsi: removeITags(raw['deskripsi']),
+          ayat: mappedayat);
+      store.setData(data: mapped);
+    } catch (e) {
+      store.setError(err: e.toString());
+    }
   }
 }
